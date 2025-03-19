@@ -28,7 +28,7 @@ resource "aws_acm_certificate" "external_alb_certificate" {
   }
 }
 
-resource "aws_route53_record" "cloudfront_certificate_validation" {
+resource "aws_route53_record" "cloudfront_route53_record" {
   for_each = { for dvo in aws_acm_certificate.cloudfront_certificate.domain_validation_options : dvo.domain_name => dvo }
   name     = each.value.resource_record_name
   type     = each.value.resource_record_type
@@ -37,7 +37,7 @@ resource "aws_route53_record" "cloudfront_certificate_validation" {
   ttl      = 300
 }
 
-resource "aws_route53_record" "external_alb_certificate_validation" {
+resource "aws_route53_record" "external_alb_route53_record" {
   for_each = { for dvo in aws_acm_certificate.external_alb_certificate.domain_validation_options : dvo.domain_name => dvo }
   name     = each.value.resource_record_name
   type     = each.value.resource_record_type
@@ -49,11 +49,11 @@ resource "aws_route53_record" "external_alb_certificate_validation" {
 resource "aws_acm_certificate_validation" "cloudfront_certificate_validation" {
   provider                = aws.virginia
   certificate_arn         = aws_acm_certificate.cloudfront_certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.cloudfront_certificate_validation : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.cloudfront_route53_record : record.fqdn]
 }
 
 resource "aws_acm_certificate_validation" "external_alb_certificate_validation" {
   provider                = aws.seoul
   certificate_arn         = aws_acm_certificate.external_alb_certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.external_alb_certificate_validation : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.external_alb_route53_record : record.fqdn]
 }
