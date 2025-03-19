@@ -47,7 +47,7 @@ resource "aws_alb_target_group" "external_alb_target_group" {
   }
 
   tags = {
-    Name = "dutymate-alb-tg"
+    Name = "dutymate-external-alb-tg"
   }
 }
 
@@ -72,7 +72,7 @@ resource "aws_alb_target_group" "internal_alb_target_group" {
   }
 
   tags = {
-    Name = "dutymate-alb-tg"
+    Name = "dutymate-internal-alb-tg"
   }
 }
 
