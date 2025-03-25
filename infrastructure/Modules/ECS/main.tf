@@ -122,7 +122,7 @@ resource "aws_ecs_task_definition" "appserver_ecs_task_definition" {
 }
 
 resource "aws_ecs_service" "webserver_ecs_service" {
-  name                               = "webserver-service"
+  name                               = "dutymate-webserver-service"
   cluster                            = aws_ecs_cluster.webserver_ecs_cluster.id
   task_definition                    = aws_ecs_task_definition.webserver_ecs_task_definition.arn
   desired_count                      = 2
@@ -142,7 +142,7 @@ resource "aws_ecs_service" "webserver_ecs_service" {
 }
 
 resource "aws_ecs_service" "appserver_ecs_service" {
-  name                               = "appserver-service"
+  name                               = "dutymate-appserver-service"
   cluster                            = aws_ecs_cluster.appserver_ecs_cluster.id
   task_definition                    = aws_ecs_task_definition.appserver_ecs_task_definition.arn
   desired_count                      = 2

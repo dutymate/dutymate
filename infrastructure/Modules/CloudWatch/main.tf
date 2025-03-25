@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "webserver_log_group" {
-  name              = "/ecs/webserver-service"
+  name              = "/ecs/dutymate-webserver-service"
   retention_in_days = 7
 
   tags = {
@@ -8,7 +8,7 @@ resource "aws_cloudwatch_log_group" "webserver_log_group" {
 }
 
 resource "aws_cloudwatch_log_group" "appserver_log_group" {
-  name              = "/ecs/appserver-service"
+  name              = "/ecs/dutymate-appserver-service"
   retention_in_days = 7
 
   tags = {
