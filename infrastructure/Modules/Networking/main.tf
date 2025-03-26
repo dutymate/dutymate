@@ -141,6 +141,38 @@ resource "aws_vpc_endpoint" "vpce_s3" {
   }
 }
 
+resource "aws_vpc_endpoint" "vpce_amazonlinux" {
+  vpc_id            = aws_vpc.vpc.id
+  vpc_endpoint_type = "Gateway"
+  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  route_table_ids   = [aws_route_table.database_route_table.id]
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::amazonlinux.ap-northeast-2.amazonaws.com/*",
+        "arn:aws:s3:::amazonlinux-2-repos-ap-northeast-2/*"
+      ],
+      "Principal": "*"
+    }
+  ]
+}
+POLICY
+
+  tags = {
+    Name = "dutymate-vpce-amazonlinux"
+  }
+}
+
 locals {
   vpce_ecr = toset([
     "api",
