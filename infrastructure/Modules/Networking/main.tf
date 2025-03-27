@@ -173,20 +173,11 @@ POLICY
   }
 }
 
-locals {
-  vpce_ecr = toset([
+resource "aws_vpc_endpoint" "vpce_ecr" {
+  for_each = toset([
     "api",
     "dkr"
   ])
-  vpce_ssm = toset([
-    "ssm",
-    "ssmmessages",
-    "ec2messages"
-  ])
-}
-
-resource "aws_vpc_endpoint" "vpce_ecr" {
-  for_each            = local.vpce_ecr
   vpc_id              = aws_vpc.vpc.id
   vpc_endpoint_type   = "Interface"
   service_name        = "com.amazonaws.${var.aws_region}.ecr.${each.key}"
@@ -200,7 +191,11 @@ resource "aws_vpc_endpoint" "vpce_ecr" {
 }
 
 resource "aws_vpc_endpoint" "vpce_ssm" {
-  for_each            = local.vpce_ssm
+  for_each = toset([
+    "ssm",
+    "ssmmessages",
+    "ec2messages"
+  ])
   vpc_id              = aws_vpc.vpc.id
   vpc_endpoint_type   = "Interface"
   service_name        = "com.amazonaws.${var.aws_region}.${each.key}"
